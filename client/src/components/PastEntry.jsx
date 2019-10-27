@@ -1,27 +1,30 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { useTheme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/core/styles';
+import { useTheme, makeStyles } from '@material-ui/core/styles';
 import JournalCard from './JournalCard.jsx';
+import getColorFromSentiment from '../scripts/getColorFromSentiment'
 
-const colors = {
-    happy: { r: 255, g: 222, b: 0 },
-    sad: { r: 104, g: 130, b: 213 },
-    love: { r: 255, g: 63, b: 63 },
-    calm: { r: 121, g: 232, b: 158 },
-}
+const useStyles = makeStyles(theme => ({
+    imgPreview: {
+        // width: '90%',
+        maxWidth: '70%',
+        margin: '10px'
+    },
+    dialogFormBody: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    dialogImage: {
+        minWidth: 200,
+        textAlign: 'center',
+    },
+}));
 
 export default function PastEntry({ entry }) {
-
     const theme = useTheme();
+    const classes = useStyles();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     const [open, setOpen] = React.useState(false);
@@ -34,13 +37,24 @@ export default function PastEntry({ entry }) {
         setOpen(false);
     };
 
+    let responseStr = "";
+    if (entry.answers) {
+        // for (let i = 0; i < entry.answers; ++i) {
+        for (let i = 0; i < entry.answers.length; ++i) {
+            console.log("here");
+            responseStr = responseStr + (entry.answers[i] + "\n");
+        }
+    }
+
+    console.log(entry);
+
     return (
         <div>
             <JournalCard
-                pic={entry.imgURL}
-                // pic="https://sdhacks19-journal.s3.us-west-2.amazonaws.com/3840x2161-2742903-your-name-4k-wallpaper-hd-top.jpg"
-                title="Shopping"
-                moodColor={colors.happy}
+                pic={entry.imgUrl}
+                title={entry.keyword}
+                time={entry.time}
+                moodColor={getColorFromSentiment(responseStr, entry.Sentiment)}
                 onClick={handleClickOpen} />
             <Dialog
                 open={open}
@@ -48,26 +62,30 @@ export default function PastEntry({ entry }) {
                 aria-labelledby="form-dialog-title"
                 fullScreen={fullScreen}
                 maxWidth="lg"
-                scroll="paper"
                 fullWidth
             >
-                <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-                    {entry.keyword}
+                <DialogTitle id="form-dialog-title">
+                    {entry.keyword} - {(new Date(entry.time)).toLocaleString()}
                 </DialogTitle>
+                <DialogContent className={fullScreen ? '' : classes.dialogFormBody}>
+                    <DialogContent className={classes.dialogImage}>
+                        <img src={entry.imgUrl} className={classes.imgPreview} alt="Your upload" />
+                        <DialogContent>
+                            <DialogContentText>
+                                {responseStr}
+                            </DialogContentText>
+                        </DialogContent>
+                    </DialogContent>
+                </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
-                        <CloseIcon></CloseIcon>
+                        <CloseIcon />
                     </Button>
                     <Button onClick={handleClose} color="primary">
                         Delete
                     </Button>
                 </DialogActions>
-                <DialogContent>
-                    <DialogContentText>
-                        This was a post.
-                    </DialogContentText>
-                </DialogContent>
             </Dialog>
-        </div>
+        </div >
     );
 }

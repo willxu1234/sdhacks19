@@ -16,5 +16,5 @@
         "mongodb": "^3.3.3",
         "mongoose": "^5.7.7"
     },
-    "proxy": "http://localhost:5000/"
+    "proxy": "http://localhost:5000"
 }

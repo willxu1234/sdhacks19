@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const entrySchema = new mongoose.Schema({
-    date: String,
+    time: Number,
     imgUrl: String,
     answers: Array,
     keyword: String,

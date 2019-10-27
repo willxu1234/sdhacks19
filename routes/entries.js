@@ -10,8 +10,8 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     let entry = new Entry({
-        date: req.body.date,
-        imgUrl: req.body.date,
+        time: req.body.time,
+        imgUrl: req.body.imgUrl,
         answers: req.body.answers,
         keyword: req.body.keyword,
         SentimentScore: req.body.SentimentScore,
@@ -25,6 +25,23 @@ router.post('/', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     const entry = await Entry.findByIdAndDelete(req.params.id);
+
+    if (!entry) return res.status(404).send('The entry with the given ID was not found.');
+
+    res.send(entry);
+});
+
+router.put('/:id', async (req, res) => {
+    const entry = await Entry.findByIdAndUpdate(req.params.id, {
+        time: req.body.time,
+        imgUrl: req.body.imgUrl,
+        answers: req.body.answers,
+        keyword: req.body.keyword,
+        SentimentScore: req.body.SentimentScore,
+        Sentiment: req.body.Sentiment
+    }, {
+        new: true
+    });
 
     if (!entry) return res.status(404).send('The entry with the given ID was not found.');
 

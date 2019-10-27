@@ -1,18 +1,15 @@
 import React from 'react';
 import uploadFileToS3 from '../scripts/uploadFileToS3';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Fab from '@material-ui/core/Fab';
+import runSentimentAnalysis from '../scripts/runSentimentAnalysis';
+import runKeywordAnalysis from '../scripts/runKeywordAnalysis';
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, useMediaQuery } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import { useTheme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
+
+import axios from 'axios';
+const URL = "http://localhost:5000/entries";
 
 const useStyles = makeStyles(theme => ({
     addBtn: {
@@ -21,7 +18,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: 3,
         color: 'white',
         padding: '0 30px',
-        minWidth: 275,
+        width: "100%",
         minHeight: 275
     },
     addFab: {
@@ -55,7 +52,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function JournalEditor({ questions /* array of strings */ }) {
+export default function JournalEditor({ questions /* array of strings */, onAdd }) {
     const classes = useStyles();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -67,26 +64,67 @@ export default function JournalEditor({ questions /* array of strings */ }) {
 
     const handleClose = () => {
         setOpen(false);
+        imgUrl && window.URL.revokeObjectURL(imgUrl);
         setImgUrl(undefined);
     };
 
-    const handleSubmit = () => {
-        handleClose();
+    const addEntry = async (newEntry) => {
+        try {
+            const resp = await axios.post(URL, { ...newEntry });
+            console.log("POST REQUEST:");
+            console.log(resp);
+            onAdd(newEntry);
+        } catch (err) {
+            console.log('addEntry', err);
+        }
+    }
+
+    const handleSubmit = async () => {
         if (imgFile) {
-            return uploadFileToS3(imgFile);
-            // return uploadFileToS3(imgFile).then(val => {
-            //     console.log(val);
-            // });
+            const journalText = Object.values(answers).reduce((t, acc) => acc + " " + t, "");
+            Promise.all([
+                uploadFileToS3(imgFile),
+                runKeywordAnalysis(journalText),
+                runSentimentAnalysis(journalText)
+            ])
+                .then(results => {
+                    let highestConfidence = 0;
+                    let keyword = "";
+                    for (let i = 0; i < results[1].KeyPhrases.length; ++i) {
+                        if (results[1].KeyPhrases[i].Score > highestConfidence) {
+                            highestConfidence = results[1].KeyPhrases[i].Score;
+                            keyword = results[1].KeyPhrases[i].Text;
+                        }
+                    }
+                    let newEntry = {
+                        time: (new Date()).getTime(),
+                        imgUrl: results[0],
+                        answers: Object.values(answers),
+                        keyword: keyword,
+                        SentimentScore: results[2].SentimentScore,
+                        Sentiment: results[2].Sentiment,
+                    }
+                    addEntry(newEntry)
+                    handleClose();
+                })
+                .catch(error => {
+                    console.error(error.message);
+                })
         }
     }
 
     const [imgUrl, setImgUrl] = React.useState(undefined);
     const [imgFile, setImgFile] = React.useState(undefined);
+    const [answers, setAnswers] = React.useState({});
 
     const handleImageChange = (e) => {
-        setImgUrl(URL.createObjectURL(e.target.files[0]));
         setImgFile(e.target.files[0]);
+        setImgUrl(window.URL.createObjectURL(e.target.files[0]));
     }
+
+    const handleTextChange = name => event => {
+        setAnswers({ ...answers, [name]: event.target.value });
+    };
 
     return (
         <div>
@@ -151,6 +189,7 @@ export default function JournalEditor({ questions /* array of strings */ }) {
                                             variant="filled"
                                             multiline
                                             rowsMax="4"
+                                            onChange={handleTextChange("ans" + idx)}
                                         />
                                     </DialogContent>
                                 );
