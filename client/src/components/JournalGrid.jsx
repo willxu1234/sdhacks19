@@ -16,10 +16,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const QUESTIONS = [
-    "How did you feel today?",
-    "What do you want to do tomorrow?",
-    "LOL idk this is a very long question to test if the styling works please ignore or if you feel like answering please tell me what your favorite fruit is. Rules: it cannot be pineapple, or apple, or anything that is not watermelon because watermelon is the only correct answer. Choose carefully. LOL idk this is a very long question to test if the styling works please ignore or if you feel like answering please tell me what your favorite fruit is. Rules: it cannot be pineapple, or apple, or anything that is not watermelon because watermelon is the only correct answer. Choose carefully.",
     "What did you do today?",
+    "What's something you did well at today?",
+    "What's something you didn't do so well at today?",
+    "What's something you want to accomplish tomorrow?",
 ]
 
 export default function JournalGrid({ entries, onAdd }) {

@@ -22,8 +22,10 @@ const useStyles = makeStyles(theme => ({
         minHeight: 275
     },
     addFab: {
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         position: 'fixed',
         zIndex: 100,
+        color: 'white',
         bottom: "1rem",
         right: "1rem",
     },
@@ -44,7 +46,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center'
     },
     dialogInsertImage: {
-        minWidth: 200,
+        maxWidth: 250,
         textAlign: 'center',
     },
     input: {
@@ -132,7 +134,6 @@ export default function JournalEditor({ questions /* array of strings */, onAdd 
                 Write new entry
             </Button>
             <Fab
-                color="primary"
                 aria-label="add"
                 className={classes.addFab}
                 onClick={handleClickOpen}

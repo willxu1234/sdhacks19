@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, useMediaQuery } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { useTheme, makeStyles } from '@material-ui/core/styles';
 import JournalCard from './JournalCard.jsx';
@@ -72,7 +72,9 @@ export default function PastEntry({ entry }) {
                         <img src={entry.imgUrl} className={classes.imgPreview} alt="Your upload" />
                         <DialogContent>
                             <DialogContentText>
-                                {responseStr}
+                                <Typography component="p" variant="h5">
+                                    {responseStr}
+                                </Typography>
                             </DialogContentText>
                         </DialogContent>
                     </DialogContent>
