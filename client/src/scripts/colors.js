@@ -1,8 +1,8 @@
 const colors = {
     happy: {
         r: 255,
-        g: 131,
-        b: 77
+        g: 195,
+        b: 31
     },
     sad: {
         r: 104,

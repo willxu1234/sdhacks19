@@ -46,7 +46,7 @@ export default function App() {
         time_of_day = "Evening";
       }
     } else {
-      if (hours >= 0 || hours <= 3) {
+      if (hours >= 0 && hours <= 3) {
         time_of_day = "Night";
       }
     }

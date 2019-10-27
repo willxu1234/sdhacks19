@@ -17,7 +17,7 @@ export default function getColorFromSentiment(text, sentiment) {
             if ((ch >= 'A' && ch <= 'Z') || ch === '!') ++upperCount;
             if (ch === ' ') ++words;
         }
-        if (upperCount >= words - 2) return colors.happy;
+        if (upperCount >= words / 4) return colors.happy;
         return colors.calm;
     } else if (sentiment === 'NEUTRAL') {
         return colors.neutral;
@@ -33,7 +33,7 @@ export default function getColorFromSentiment(text, sentiment) {
             if ((ch >= 'A' && ch <= 'Z') || ch === '!') ++upperCount;
             if (ch === ' ') ++words;
         }
-        if (upperCount >= words - 2) return colors.mad;
+        if (upperCount >= words / 4) return colors.mad;
         return colors.sad;
     }
 }

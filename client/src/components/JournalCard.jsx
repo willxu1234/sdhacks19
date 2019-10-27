@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
         margin: "0 theme.spacing(2)",
         // margin: "0 1rem",
         // opacity: "0.8",
-        boxShadow: props => `0 3px 10px 4px rgba(${props.r}, ${props.g}, ${props.b}, 0.7)` //'0 3px 5px 2px rgba(255, 105, 135, .3)',
+        boxShadow: props => `0 5px 10px 6px rgba(${props.r}, ${props.g}, ${props.b}, 0.85)` //'0 3px 5px 2px rgba(255, 105, 135, .3)',
     },
     typography: {
         position: "absolute",
