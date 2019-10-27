@@ -16,8 +16,8 @@ const colors = {
     },
     love: {
         r: 255,
-        g: 63,
-        b: 63
+        g: 120,
+        b: 120
     },
     calm: {
         r: 121,
@@ -25,9 +25,9 @@ const colors = {
         b: 158
     },
     mixed: {
-        r: 0,
-        g: 255,
-        b: 0
+        r: 220,
+        g: 170,
+        b: 250
     },
     neutral: {
         r: 210,
