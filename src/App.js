@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+// Material UI
+import Fab from '@material-ui/core/Fab';
+import Header from './components/Header.jsx';
+import JournalGrid from './components/JournalGrid.jsx';
+import PastEntry from './components/PastEntry.jsx';
 import './App.css';
 
-function App() {
+export default function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Header message="Good Afternoon, Will"></Header>
       </header>
+      <body>
+        <JournalGrid />
+        <Fab color="primary" aria-label="add">
+          Add
+        </Fab>
+      </body>
     </div>
   );
 }
-
-export default App;
