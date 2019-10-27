@@ -63,7 +63,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <Header message={`Good ${timeOfDay}, Will`}></Header>
+      <Header message={`Good ${timeOfDay}, Esther and Will`}></Header>
       <JournalGrid entries={entries} onAdd={handleAdd} />
     </div>
   );
