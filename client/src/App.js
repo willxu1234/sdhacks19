@@ -3,11 +3,18 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/Header.jsx';
 import JournalGrid from './components/JournalGrid.jsx';
 import PastEntry from './components/PastEntry.jsx';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { CssBaseline } from '@material-ui/core';
 import './App.css';
 
 import axios from 'axios';
 require('dotenv').config();
 
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: 'Roboto Slab, Roboto, Arial',
+  },
+});
 
 const URL = "http://localhost:5000/entries";
 
@@ -62,9 +69,9 @@ export default function App() {
   }
 
   return (
-    <div className="App">
+    <ThemeProvider theme={theme} className="App">
       <Header message={`Good ${timeOfDay}, Esther and Will`}></Header>
       <JournalGrid entries={entries} onAdd={handleAdd} />
-    </div>
+    </ThemeProvider>
   );
 }

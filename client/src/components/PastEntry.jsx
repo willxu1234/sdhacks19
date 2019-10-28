@@ -8,7 +8,9 @@ import getColorFromSentiment from '../scripts/getColorFromSentiment'
 const useStyles = makeStyles(theme => ({
     imgPreview: {
         // width: '90%',
+        maxHeight: '40rem',
         maxWidth: '70%',
+        // maxHeight: '10%',
         margin: '10px'
     },
     dialogFormBody: {
