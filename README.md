@@ -1,3 +1,7 @@
+## How to use
+
+Run `mongod` to start the database, then run `npm start` in the root directory. To boot the client, run `npm start` in the `client` directory.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
